@@ -29,6 +29,10 @@ namespace Ketchup.Sample.Client
             var serviceCollection = new ServiceCollection();
             var containerBuilder = new ContainerBuilder();
 
+            //IServiceCollection service;
+
+            //serviceCollection.AddGrpcClient<RpcTest.RpcTestClient>(o => o.Address = new Uri("")).addPoly;
+
             containerBuilder.Populate(serviceCollection);
 
             containerBuilder.AddCoreService().RegisterModules();
@@ -46,15 +50,18 @@ namespace Ketchup.Sample.Client
         public static void Testing(IGrpcClientProvider provider)
         {
 
-
+            //services.AddGrpcClient<RpcTest.RpcTestBase>(o => o.Address = new Uri("")).AddPolicyHandler;
             Task.Run(async () =>
             {
                 var count = 10000;
 
-                //拦截器测试
+                ////拦截器测试
                 //var client = await provider.FindGrpcClient<RpcTest.RpcTestClient>("sample");
 
                 //var request = new HelloRequest() { Age = 28, Name = "simple" };
+
+                //var result = await client.SayHelloAsync(request);
+                //Console.WriteLine($"{result.Msg}========{result.Code}==========={result.Result}");
                 //var result = await client.AddPollyExecuteAsync(request, async () => await client.SayHelloAsync(request));
 
                 //var result = await client.SayHelloAsync(new HelloRequest() { Age = 28, Name = "simple" });
@@ -84,7 +91,7 @@ namespace Ketchup.Sample.Client
                 {
 
                     var result = await client.SayHelloAsync(new HelloRequest() { Age = 28, Name = "simple" });
-                    //Console.WriteLine($"{result.Msg}========{result.Code}==========={result.Result}");
+                    Console.WriteLine($"{result.Msg}========{result.Code}==========={result.Result}==={i}");
                 }
                 sw.Stop();
                 TimeSpan ts = sw.Elapsed;

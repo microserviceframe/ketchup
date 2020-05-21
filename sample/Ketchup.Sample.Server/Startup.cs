@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Ketchup.Core;
 using Ketchup.Core.Configurations;
 using Ketchup.Core.Utilities;
+using Ketchup.Grpc.Internal.Intercept;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +28,7 @@ namespace Ketchup.Sample.Server
         {
             // Add things to the service collection that are only for the
             // development environment.
-            services.AddGrpc();
+            services.AddGrpc(o=>o.Interceptors.Add<PollyInterceptor>());
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
