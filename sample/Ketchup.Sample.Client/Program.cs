@@ -6,6 +6,7 @@ using Grpc.Domain;
 using Grpc.Test;
 using Ketchup.Core;
 using Ketchup.Core.Configurations;
+using Ketchup.Core.Utilities;
 using Ketchup.Grpc.Internal.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,8 @@ namespace Ketchup.Sample.Client
 
             var container = containerBuilder.Build();
 
+            ServiceLocator.Current = container;
+
             var serviceProvider = new AutofacServiceProvider(container);
 
             await Test.Testing(container.Resolve<IGrpcClientProvider>());
@@ -48,9 +51,9 @@ namespace Ketchup.Sample.Client
 
             var count = 7;
 
-            var client1 = await provider.FindGrpcClient<simpleTest.simpleTestClient>("sample");
+            //var client1 = await provider.FindGrpcClient<simpleTest.simpleTestClient>("sample");
 
-            var one = await client1.TestAsync(new global::Grpc.Test.HelloRequest() { Age = 28, Name = "simple" });
+            //var one = await client1.TestAsync(new global::Grpc.Test.HelloRequest() { Age = 28, Name = "simple" });
 
             var client = await provider.FindGrpcClient<RpcTest.RpcTestClient>("sample");
 
@@ -60,7 +63,7 @@ namespace Ketchup.Sample.Client
             //    Console.WriteLine($"{result.Msg}========{result.Code}==========={result.Result}");
             //}
 
-            var result1 = await client.SayHelloEventAsync(new HelloRequest() { Age = 28, Name = "simple" });
+            //var result1 = await client.SayHelloEventAsync(new HelloRequest() { Age = 28, Name = "simple" });
 
             var result = await client.SayHelloAsync(new HelloRequest() { Age = 28, Name = "simple" });
 
@@ -71,7 +74,7 @@ namespace Ketchup.Sample.Client
 
             //var result = await client.SayHelloAsync(request);
             ////var result = client.SayHello(request);
-            //Console.WriteLine($"{result.Msg}========{result.Code}==========={result.Result}");
+            Console.WriteLine($"{result.Msg}========{result.Code}==========={result.Result}");
             //var result = await client.AddPollyExecuteAsync(request, async () => await client.SayHelloAsync(request));
 
             //var result = await client.SayHelloAsync(new HelloRequest() { Age = 28, Name = "simple" });

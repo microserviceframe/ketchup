@@ -2,6 +2,7 @@
 using Grpc.Core;
 using Grpc.Domain;
 using Ketchup.Caching.Internal;
+using Ketchup.Core.Cache;
 using Ketchup.Core.Command.Attributes;
 using Ketchup.Core.EventBus;
 using Ketchup.Core.Utilities;
@@ -20,7 +21,7 @@ namespace Ketchup.Sample.Domain.Services
             _cache = ServiceLocator.GetService<ICacheProvider>(CacheModel.Redis.ToString());
         }
 
-        [HystrixCommand(MethodName = nameof(SayHello), Timeout = 3000)]
+        [HystrixCommand(MethodName = nameof(SayHello), ExcuteTimeoutInMilliseconds = 3000)]
         public override async Task<HelloReponse> SayHello(HelloRequest request, ServerCallContext context)
         {
 
