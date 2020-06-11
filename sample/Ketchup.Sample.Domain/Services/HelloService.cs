@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Domain;
-using Ketchup.Caching.Internal;
+using Ketchup.Core.Attributes;
 using Ketchup.Core.Cache;
-using Ketchup.Core.Command.Attributes;
 using Ketchup.Core.EventBus;
+using Ketchup.Core.Kong.Attribute;
 using Ketchup.Core.Utilities;
 using Ketchup.Sample.Domain.Services.Events;
 using Newtonsoft.Json;
@@ -21,7 +21,8 @@ namespace Ketchup.Sample.Domain.Services
             _cache = ServiceLocator.GetService<ICacheProvider>(CacheModel.Redis.ToString());
         }
 
-        [HystrixCommand(MethodName = nameof(SayHello), ExcuteTimeoutInMilliseconds = 3000)]
+        //[HystrixCommand(MethodName = nameof(SayHello), ExcuteTimeoutInMilliseconds = 3000)]
+        [KongRoute(Name = nameof(SayHello), Paths = new[] { "/sample/SayHello" })]
         public override async Task<HelloReponse> SayHello(HelloRequest request, ServerCallContext context)
         {
 
@@ -33,7 +34,7 @@ namespace Ketchup.Sample.Domain.Services
             {
                 Code = 1,
                 Msg = "hello simple",
-                Result = JsonConvert.SerializeObject(result)
+                Result = result
             };
         }
 

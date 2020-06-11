@@ -22,14 +22,16 @@ namespace Ketchup.Gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
+            services.AddGrpc();
         }
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             // Add things to the service collection that are only for the
             // development environment.
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
+            services.AddGrpc();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -58,12 +60,7 @@ namespace Ketchup.Gateway
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseKetchup();
         }
 
         public void ConfigureStaging(IApplicationBuilder app, IWebHostEnvironment env)
@@ -78,12 +75,7 @@ namespace Ketchup.Gateway
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseKetchup();
         }
     }
 }
