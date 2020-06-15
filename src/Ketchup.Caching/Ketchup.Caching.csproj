@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0</Version>
+    <Version>0.1.0-preview</Version>
     <Authors>simple</Authors>
-    <Company>wltx</Company>
-    <Product>Ketchup.Caching</Product>
-    <PackageId>Ketchup.Caching</PackageId>
-    <Description>Ketchup</Description>
+    <Company>simple</Company>
+    <Product>KetchupCore.Caching</Product>
+    <PackageId>KetchupCore.Caching</PackageId>
+    <Description>Ketchup 缓存组件</Description>
   </PropertyGroup>
 
   <ItemGroup>
