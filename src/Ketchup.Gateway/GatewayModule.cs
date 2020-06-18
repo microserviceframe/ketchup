@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
-using Grpc.Domain;
 using Ketchup.Core;
 using Ketchup.Core.Modules;
 using Ketchup.Core.Utilities;
+using Ketchup.Gateway.Configurations;
 using Ketchup.Gateway.Internal;
 using Ketchup.Gateway.Internal.Implementation;
 using Ketchup.Permission;
@@ -17,9 +17,11 @@ namespace Ketchup.Gateway
     {
         public override void Initialize(KetchupPlatformContainer builder)
         {
+            var appConfig = new AppConfig();
+
             ServiceLocator.GetService<IGatewayProvider>()
                 .InitGatewaySetting()
-                .SettingKongService()
+                .SettingKongService(appConfig)
                 .MapServiceClient(ClientMaps);
         }
 
@@ -37,10 +39,25 @@ namespace Ketchup.Gateway
         {
             return new Dictionary<string, Type>()
             {
-                {"menus.PageSerach", typeof(RpcMenu.RpcMenuClient)},
-                {"menus.CreateOrEdit", typeof(RpcMenu.RpcMenuClient)},
+                {"menus.PageSerachMenu", typeof(RpcMenu.RpcMenuClient)},
+                {"menus.CreateOrEditMenu", typeof(RpcMenu.RpcMenuClient)},
                 {"menus.GetMenusByRole", typeof(RpcMenu.RpcMenuClient)},
-                {"menus.GetRoleMenus", typeof(RpcMenu.RpcMenuClient)}
+                {"menus.GetMenusSetRole", typeof(RpcMenu.RpcMenuClient)},
+                {"menus.RemoveMenu", typeof(RpcMenu.RpcMenuClient)},
+
+                {"operates.PageSerachOperate", typeof(RpcOperate.RpcOperateClient)},
+                {"operates.CreateOrEditOperate", typeof(RpcOperate.RpcOperateClient)},
+                {"operates.GetMenuOfOperate", typeof(RpcOperate.RpcOperateClient)},
+                {"operates.RemoveOperate", typeof(RpcOperate.RpcOperateClient)},
+
+                {"sysRoles.PageSerachRole", typeof(RpcRole.RpcRoleClient)},
+                {"sysRoles.CreateOrEditRole", typeof(RpcRole.RpcRoleClient)},
+                {"sysRoles.RemoveRole", typeof(RpcRole.RpcRoleClient)},
+                {"sysRoles.SetRolePermission", typeof(RpcRole.RpcRoleClient)},
+
+                {"sysUsers.PageSerachSysUser", typeof(RpcSysUser.RpcSysUserClient)},
+                {"sysUsers.CreateOrEditSysUser", typeof(RpcSysUser.RpcSysUserClient)},
+                {"sysUsers.RemoveSysUser", typeof(RpcSysUser.RpcSysUserClient)},
             };
         }
     }
