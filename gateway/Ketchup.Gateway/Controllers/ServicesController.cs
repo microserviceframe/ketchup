@@ -52,9 +52,6 @@ namespace Ketchup.Gateway.Controllers
                     new Claim(ClaimTypes.Sid, user.UserId.ToString()),
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Role, user.RoleId.ToString())
-                    // new Claim(ClaimTypes.Sid, "1"),
-                    //new Claim(ClaimTypes.Name, "simple"),
-                    //new Claim(ClaimTypes.Role, "admin")
                    },
                    issuer: config.Gateway.Key,
                    notBefore: DateTime.Now,
@@ -69,19 +66,27 @@ namespace Ketchup.Gateway.Controllers
                 UserName = user.UserName,
                 Expired = config.Gateway.AuthExpired,
                 RoleId = user.RoleId
-                //UserId = 1,
-                //UserName = "simple",
-                //Expired = config.Gateway.AuthExpired,
-                //RoleId = 1
             });
         }
 
         [HttpPost("api/{server}/{service}/{method}")]
         [KetchupExceptionFilter]
-        public async Task<object> ExecuteService(string server, string service, string method, [FromBody] Dictionary<string, object> inputBody)
+        public async Task<object> ExecutePostMethod(string server, string service, string method, [FromBody] Dictionary<string, object> inputBody)
+        {
+            return await ExecuteService(server, service, method, inputBody);
+        }
+
+        [HttpGet("api/{server}/{service}/{method}")]
+        [KetchupExceptionFilter]
+        public async Task<object> ExecuteGetMethod(string server, string service, string method, [FromBody] Dictionary<string, object> inputBody)
+        {
+            return await ExecuteService(server, service, method, inputBody);
+        }
+
+        private async Task<object> ExecuteService(string server, string service, string method, [FromBody] Dictionary<string, object> inputBody)
         {
             method = method.Substring(0, 1).ToUpper() + method.Substring(1);
-            var clientType = await GetClientType($"{service}.{method}");
+            var clientType = await GetClientType($"{server}/{service}/{method}");
 
             var client = await _clientProvider.GetClientAsync(server, clientType);
 
@@ -113,7 +118,7 @@ namespace Ketchup.Gateway.Controllers
             if (value != null)
                 return value;
 
-            var clientType = Type.GetType(await _routeProvider.GetCustomerServerRoute(key));
+            var clientType = Type.GetType(await _routeProvider.GetCustomerServerRouter(key));
             _gatewayProvider.MapClients.TryAdd(key, clientType);
 
             return clientType;

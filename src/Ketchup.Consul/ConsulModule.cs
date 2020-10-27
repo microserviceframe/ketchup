@@ -20,7 +20,7 @@ namespace Ketchup.Consul
         public override void Initialize(KetchupPlatformContainer builder)
         {
             builder.GetInstances<IConsulProvider>().RegisterConsulAgent();
-            builder.GetInstances<IServiceRouteProvider>().AddCustomerServerRoute().Wait();
+            builder.GetInstances<IServiceRouteProvider>().AddCustomerServerRouter().Wait();
         }
 
         protected override void RegisterModule(ContainerBuilderWrapper builder)
@@ -34,9 +34,11 @@ namespace Ketchup.Consul
                 .WithParameter(new TypedParameter(typeof(AppConfig), appConfig))
                 .SingleInstance();
 
-            builder.ContainerBuilder.RegisterType<ServiceRouteProvider>().As<IServiceRouteProvider>()
+            builder.ContainerBuilder.RegisterType<ServiceRouterProvider>().As<IServiceRouteProvider>()
                 .WithParameter(new TypedParameter(typeof(Type[]), ContainerBuilderExtensions.GetTypes()))
                 .SingleInstance();
+
+            builder.ContainerBuilder.RegisterType<ServerProvider>().As<IServerProvider>().InstancePerDependency();
         }
 
         public override void MapGrpcService(IEndpointRouteBuilder endpointRoute)
